@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.sql.SQLException;
@@ -18,6 +20,8 @@ import sqlitetestnew.df29.lumiere.sqlitetestnew.Database.DBAdapter;
  */
 public class SignUp extends AppCompatActivity {
 
+    public String sex;
+    RadioGroup radioSexButton;
     EditText editUsername, editAddress, editPhone, editEmail;
     Button btnSignup;
 
@@ -33,6 +37,7 @@ public class SignUp extends AppCompatActivity {
         editPhone = (EditText) findViewById(R.id.editPhone);
         editEmail = (EditText) findViewById(R.id.editEmail);
         btnSignup = (Button) findViewById(R.id.buttonCreateAccount);
+        radioSexButton = (RadioGroup) findViewById(R.id.radioSexButton);
 
         mydbadapter = new DBAdapter(this);
         try {
@@ -54,7 +59,7 @@ public class SignUp extends AppCompatActivity {
                     String password = editAddress.getText().toString();
                     String phone = editPhone.getText().toString();
                     String email = editEmail.getText().toString();
-                    String gender = null;
+                    String gender = sex;
 
                     long i = mydbadapter.register(username, password, phone, email, gender);
                     if (i != -1){
@@ -63,6 +68,7 @@ public class SignUp extends AppCompatActivity {
                         editAddress.setText("");
                         editPhone.setText("");
                         editEmail.setText("");
+                        radioSexButton.clearCheck();
                         finish();
                     }
                 } catch (android.database.SQLException e){
@@ -70,5 +76,18 @@ public class SignUp extends AppCompatActivity {
                 }
             }
         });
+    }
+    public void onRadioButtonClicked (View view){
+        boolean checked = ((RadioButton) view).isChecked();
+        switch (view.getId()){
+            case R.id.radioMale:
+                sex = "Male";
+                break;
+            case R.id.radioFemale:
+                sex = "Female";
+                break;
+            default:
+                break;
+        }
     }
 }

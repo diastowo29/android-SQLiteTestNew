@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+    android:padding="16dp"
     android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold"
+        android:text="Nama"
+        android:id="@+id/textView8" />
 
     <EditText
         android:id="@+id/editTextUserName"
-        android:hint="Name"
+        android:hint="Nama"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
@@ -13,20 +22,44 @@
         <requestFocus />
     </EditText>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Alamat"
+        android:id="@+id/textView9" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editAddress"
-        android:hint="Address"
+        android:hint="Alamat Anda"
         android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Telp"
+        android:id="@+id/textView10" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="phone"
-        android:hint="Phone Number"
+        android:hint="Nomor Telp"
         android:ems="10"
         android:id="@+id/editPhone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Email"
+        android:id="@+id/textView11" />
 
     <EditText
         android:layout_width="match_parent"
@@ -37,7 +70,16 @@
         android:id="@+id/editEmail"
         android:layout_gravity="center_horizontal" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Jenis Kelamin"
+        android:id="@+id/textView12" />
+
     <RadioGroup
+        android:id="@+id/radioSexButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -45,6 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Male"
+            android:onClick="onRadioButtonClicked"
             android:id="@+id/radioMale"
             android:checked="false" />
 
@@ -53,6 +96,7 @@
             android:layout_height="wrap_content"
             android:text="Female"
             android:id="@+id/radioFemale"
+            android:onClick="onRadioButtonClicked"
             android:checked="false" />
     </RadioGroup>
 
@@ -60,7 +104,8 @@
         android:id="@+id/buttonCreateAccount"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Create Account"
+        android:layout_marginTop="20dp"
+        android:text="Buat Akun"
         android:layout_marginBottom="60dp" />
 
 </LinearLayout>

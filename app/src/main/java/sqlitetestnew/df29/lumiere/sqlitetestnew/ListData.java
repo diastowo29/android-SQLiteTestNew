@@ -9,6 +9,11 @@ public class ListData {
     String title;
     int imgResId;
 
+    public ListData (String name, String email){
+        this.title = name;
+        this.Description = email;
+    }
+
     public String getDescription() {
         return Description;
     }

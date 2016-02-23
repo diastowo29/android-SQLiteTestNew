@@ -8,35 +8,37 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Lumiere on 2/23/2016.
  */
 public class ListViewAdapter extends BaseAdapter{
 
-    ArrayList mylist = new ArrayList();
     LayoutInflater inflater;
     Context context;
+    List<ListData> data;
 
-    public ListViewAdapter (Context context, ArrayList mylist){
-        this.mylist = mylist;
+    public ListViewAdapter (Context context, List<ListData> mylist){
+        this.data = mylist;
         this.context = context;
         inflater = LayoutInflater.from(this.context);
     }
 
     @Override
     public int getCount() {
-        return mylist.size();
+        return data.size();
     }
 
     @Override
-    public ListData getItem(int position) {
-        return (ListData) mylist.get(position);
+    public Object getItem(int position) {
+        return data.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return data.indexOf(getItem(position));
     }
 
     @Override
@@ -51,14 +53,14 @@ public class ListViewAdapter extends BaseAdapter{
             myViewHolder = (MyViewHolder) convertView.getTag();
         }
 
-        ListData currentListData = getItem(position);
+        ListData currentListData = (ListData) getItem(position);
         myViewHolder.txtNama.setText(currentListData.getTitle());
         myViewHolder.txtEmail.setText(currentListData.getDescription());
 
         return convertView;
     }
 
-    private class MyViewHolder {
+    public class MyViewHolder {
         TextView txtNama, txtEmail;
 
         public MyViewHolder(View item) {

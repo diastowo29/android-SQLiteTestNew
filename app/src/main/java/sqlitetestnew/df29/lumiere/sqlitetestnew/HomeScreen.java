@@ -10,9 +10,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import sqlitetestnew.df29.lumiere.sqlitetestnew.Database.DBHelper;
 
@@ -26,15 +29,10 @@ public class HomeScreen extends AppCompatActivity {
     ArrayList mylist = new ArrayList();
     private String tableName = DBHelper.DATABASE_TABLE_NAME;
     SQLiteDatabase newDB;
-
-    String[] title = new String[]{
-            "Title 1", "Title 2", "Title 3",
-            "Title 4", "Title 5"
-    };
-    String[] desc = new String[]{
-            "Desc 1", "Desc 2", "Desc 3",
-            "Desc 4", "Desc 5"
-    };
+    Cursor myCursor;
+    List<ListData> data;
+//    ListViewAdapter mylistviewadapter;
+//    ListData mylistdata;
 
     FragmentManager fm = getSupportFragmentManager();
 
@@ -46,16 +44,17 @@ public class HomeScreen extends AppCompatActivity {
         lvItem = (ListView) findViewById(R.id.listView);
 
         getDataInList();
-        lvItem.setAdapter(new ListViewAdapter(context, mylist));
+        lvItem.setAdapter(new ListViewAdapter(context, data));
         lvItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(HomeScreen.this, "" + lvItem.getAdapter().getItemId(position), Toast.LENGTH_SHORT).show();
+                String extra = String.valueOf(lvItem.getAdapter().getItemId(position)+1);
                 DFragment dFragment = new DFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("extra", extra);
+                dFragment.setArguments(bundle);
                 dFragment.show(fm, "Dialog Fragment");
-                ListData listData = new ListData();
-                listData.getTitle();
-                ListViewAdapter listViewAdapter = new ListViewAdapter(context, mylist);
-                Log.v("Data Clicked", "Data Clicked at "+ listViewAdapter.getItem(position));
             }
         });
     }
@@ -63,17 +62,16 @@ public class HomeScreen extends AppCompatActivity {
     private void getDataInList() {
         DBHelper mydbhelper = new DBHelper(this.getApplicationContext());
         newDB = mydbhelper.getWritableDatabase();
-        Cursor cursor = newDB.rawQuery("SELECT name, email FROM "+tableName, null);
-        if (cursor != null){
-            if (cursor.moveToFirst()){
+        myCursor = newDB.rawQuery("SELECT name, email FROM "+tableName, null);
+        if (myCursor != null){
+            if (myCursor.moveToFirst()){
+                data = new ArrayList<ListData>();
                 do {
-                    ListData ld = new ListData();
-                    String name = cursor.getString(cursor.getColumnIndex("name"));
-                    String email = cursor.getString(cursor.getColumnIndex("email"));
-                    ld.setTitle(name);
-                    ld.setDescription(email);
-                    mylist.add(ld);
-                } while (cursor.moveToNext());
+                    String name = myCursor.getString(myCursor.getColumnIndex("name"));
+                    String email = myCursor.getString(myCursor.getColumnIndex("email"));
+                    ListData item = new ListData(name,email);
+                    data.add(item);
+                } while (myCursor.moveToNext());
             }
         }
 
