@@ -5,7 +5,7 @@
 
     <EditText
         android:id="@+id/editTextUserName"
-        android:hint="Username"
+        android:hint="Name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
@@ -14,18 +14,47 @@
     </EditText>
 
     <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
-        android:inputType="textPassword" />
+        android:id="@+id/editAddress"
+        android:hint="Address"
+        android:layout_gravity="center_horizontal" />
 
     <EditText
-        android:id="@+id/editTextConfirmPassword"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Confirm Password"
-        android:inputType="textPassword" />
+        android:inputType="phone"
+        android:hint="Phone Number"
+        android:ems="10"
+        android:id="@+id/editPhone" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:hint="Email"
+        android:ems="10"
+        android:id="@+id/editEmail"
+        android:layout_gravity="center_horizontal" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"
+            android:id="@+id/radioMale"
+            android:checked="false" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"
+            android:id="@+id/radioFemale"
+            android:checked="false" />
+    </RadioGroup>
 
     <Button
         android:id="@+id/buttonCreateAccount"

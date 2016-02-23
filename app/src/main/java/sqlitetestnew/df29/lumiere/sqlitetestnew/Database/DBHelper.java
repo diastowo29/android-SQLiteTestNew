@@ -9,9 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DBHelper extends SQLiteOpenHelper{
 
-    private static final String DATABASE_NAME = "membersdb";
+    private static final String DATABASE_NAME = "contact_dbnew";
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_CREATE = "CREATE TABLE users (id integer primary key autoincrement,username text not null,password text not null);";
+    public static final String DATABASE_TABLE_NAME = "contact";
+    private static final String DATABASE_CREATE = "CREATE TABLE contact (id integer primary key autoincrement,name text not null, address text not null, phone text not null, email text not null, gender text);";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -24,7 +25,7 @@ public class DBHelper extends SQLiteOpenHelper{
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int arg1, int arg2) {
-        db.execSQL("DROP TABLE IF EXIST users");
+        db.execSQL("DROP TABLE IF EXIST contact");
         onCreate(db);
     }
 }

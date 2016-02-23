@@ -18,7 +18,7 @@ import sqlitetestnew.df29.lumiere.sqlitetestnew.Database.DBAdapter;
  */
 public class SignUp extends AppCompatActivity {
 
-    EditText editUsername, editPassword, editConfPassword;
+    EditText editUsername, editAddress, editPhone, editEmail;
     Button btnSignup;
 
     DBAdapter mydbadapter;
@@ -29,8 +29,9 @@ public class SignUp extends AppCompatActivity {
         setContentView(R.layout.signup);
 
         editUsername = (EditText) findViewById(R.id.editTextUserName);
-        editPassword = (EditText) findViewById(R.id.editTextPassword);
-        editConfPassword = (EditText) findViewById(R.id.editTextConfirmPassword);
+        editAddress = (EditText) findViewById(R.id.editAddress);
+        editPhone = (EditText) findViewById(R.id.editPhone);
+        editEmail = (EditText) findViewById(R.id.editEmail);
         btnSignup = (Button) findViewById(R.id.buttonCreateAccount);
 
         mydbadapter = new DBAdapter(this);
@@ -45,16 +46,23 @@ public class SignUp extends AppCompatActivity {
             public void onClick(View v) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(editUsername.getWindowToken(), 0);
-                imm.hideSoftInputFromWindow(editPassword.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(editAddress.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(editPhone.getWindowToken(), 0);
+                imm.hideSoftInputFromWindow(editEmail.getWindowToken(), 0);
                 try{
                     String username = editUsername.getText().toString();
-                    String password = editPassword.getText().toString();
+                    String password = editAddress.getText().toString();
+                    String phone = editPhone.getText().toString();
+                    String email = editEmail.getText().toString();
+                    String gender = null;
 
-                    long i = mydbadapter.register(username, password);
+                    long i = mydbadapter.register(username, password, phone, email, gender);
                     if (i != -1){
                         Toast.makeText(SignUp.this, "Account successfully created", Toast.LENGTH_SHORT).show();
                         editUsername.setText("");
-                        editPassword.setText("");
+                        editAddress.setText("");
+                        editPhone.setText("");
+                        editEmail.setText("");
                         finish();
                     }
                 } catch (android.database.SQLException e){
