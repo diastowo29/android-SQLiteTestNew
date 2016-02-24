@@ -2,28 +2,55 @@ package sqlitetestnew.df29.lumiere.sqlitetestnew;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import sqlitetestnew.df29.lumiere.sqlitetestnew.Database.DBAdapter;
+import sqlitetestnew.df29.lumiere.sqlitetestnew.Database.DBHelper;
 
 public class MainActivity extends AppCompatActivity {
 
     DBAdapter mydbadapter;
-    Button btnLogin, btnSignup;
-    EditText editUsername, editPassword;
+//    Button btnLogin, btnSignup;
+//    EditText editUsername, editPassword;
+ListView lvItem;
+    RelativeLayout relDataNotFound;
+    Context context = MainActivity.this;
+    ArrayList mylist = new ArrayList();
+    private String tableName = DBHelper.DATABASE_TABLE_NAME;
+    SQLiteDatabase newDB;
+    Cursor myCursor;
+    List<ListData> data;
+    SharedPreferences sharedPreferences;
+    String PREFERENCES = "loginPref";
+    public int login = 0;
+    public boolean lvClick = false;
+//    ListViewAdapter mylistviewadapter;
+//    ListData mylistdata;
+
+    FragmentManager fm = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        btnLogin = (Button) findViewById(R.id.btnLogin);
-        btnSignup = (Button) findViewById(R.id.btnSignup);
-
-        editUsername = (EditText) findViewById(R.id.editUsername);
-        editPassword = (EditText) findViewById(R.id.editPassword);
+//        btnLogin = (Button) findViewById(R.id.btnLogin);
+//        btnSignup = (Button) findViewById(R.id.btnSignup);
+//
+//        editUsername = (EditText) findViewById(R.id.editUsername);
+//        editPassword = (EditText) findViewById(R.id.editPassword);
 
         mydbadapter = new DBAdapter(this);
         try {
@@ -76,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         });
 */
 
+/*
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +111,40 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+*/
+        lvItem = (ListView) findViewById(R.id.listView);
+        relDataNotFound = (RelativeLayout) findViewById(R.id.relDataNotFound);
+
+        sharedPreferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
+        login = sharedPreferences.getInt("login", 0);
+        Log.v("Pref", "PrefInt : " + login);
+
+        getDataInList();
+        /*if (login == 1){
+            lvItem.setVisibility(View.VISIBLE);
+            relDataNotFound.setVisibility(View.GONE);
+            lvItem.setAdapter(new ListViewAdapter(context, data));
+            lvClick = true;
+        } else {
+            lvItem.setVisibility(View.GONE);
+            relDataNotFound.setVisibility(View.VISIBLE);
+            lvClick = false;
+        }*/
+
+        if (lvClick == true){
+            lvItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(MainActivity.this, "" + lvItem.getAdapter().getItemId(position), Toast.LENGTH_SHORT).show();
+                    String extra = String.valueOf(lvItem.getAdapter().getItemId(position)+1);
+                    DFragment dFragment = new DFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("extra", extra);
+                    dFragment.setArguments(bundle);
+                    dFragment.show(fm, "Dialog Fragment");
+                }
+            });
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +154,35 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+    public void showData (){
+        if (login == 1){
+            lvItem.setVisibility(View.VISIBLE);
+            relDataNotFound.setVisibility(View.GONE);
+            lvItem.setAdapter(new ListViewAdapter(context, data));
+            lvClick = true;
+        } else {
+            lvItem.setVisibility(View.GONE);
+            relDataNotFound.setVisibility(View.VISIBLE);
+            lvClick = false;
+        }
+
+/*
+        if (lvClick == true){
+            lvItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(MainActivity.this, "" + lvItem.getAdapter().getItemId(position), Toast.LENGTH_SHORT).show();
+                    String extra = String.valueOf(lvItem.getAdapter().getItemId(position)+1);
+                    DFragment dFragment = new DFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("extra", extra);
+                    dFragment.setArguments(bundle);
+                    dFragment.show(fm, "Dialog Fragment");
+                }
+            });
+        }
+*/
     }
 
     @Override
@@ -110,9 +201,28 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            getDataInList();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public void getDataInList() {
+        DBHelper mydbhelper = new DBHelper(this.getApplicationContext());
+        newDB = mydbhelper.getWritableDatabase();
+        myCursor = newDB.rawQuery("SELECT name, email FROM " + tableName, null);
+        if (myCursor != null){
+            if (myCursor.moveToFirst()){
+                data = new ArrayList<ListData>();
+                do {
+                    String name = myCursor.getString(myCursor.getColumnIndex("name"));
+                    String email = myCursor.getString(myCursor.getColumnIndex("email"));
+                    ListData item = new ListData(name,email);
+                    data.add(item);
+                    Log.v("Data", "Data : "+data);
+                } while (myCursor.moveToNext());
+            }
+        }
+        showData();
+        login = sharedPreferences.getInt("login", 0);
     }
 }

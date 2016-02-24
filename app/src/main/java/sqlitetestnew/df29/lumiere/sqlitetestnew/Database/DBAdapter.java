@@ -49,6 +49,7 @@ public class DBAdapter {
         return mydb.insert(DATABASE_TABLE, null, initialValues);
     }
 
+/*
     public boolean Login(String username, String password) throws SQLException{
         Cursor mycursor = mydb.rawQuery("SELECT * FROM "+ DATABASE_TABLE +" WHERE username=? AND password=?", new String[]{username, password});
         if (mycursor!=null){
@@ -58,4 +59,5 @@ public class DBAdapter {
         }
         return false;
     }
+*/
 }

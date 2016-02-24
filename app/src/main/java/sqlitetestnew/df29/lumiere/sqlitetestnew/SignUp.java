@@ -1,6 +1,8 @@
 package sqlitetestnew.df29.lumiere.sqlitetestnew;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -21,9 +23,13 @@ import sqlitetestnew.df29.lumiere.sqlitetestnew.Database.DBAdapter;
 public class SignUp extends AppCompatActivity {
 
     public String sex;
+    private final String PREFERENCES = "loginPref";
+    SharedPreferences sharedPreferences;
     RadioGroup radioSexButton;
     EditText editUsername, editAddress, editPhone, editEmail;
     Button btnSignup;
+    MainActivity mainActivity;
+
 
     DBAdapter mydbadapter;
 
@@ -38,6 +44,7 @@ public class SignUp extends AppCompatActivity {
         editEmail = (EditText) findViewById(R.id.editEmail);
         btnSignup = (Button) findViewById(R.id.buttonCreateAccount);
         radioSexButton = (RadioGroup) findViewById(R.id.radioSexButton);
+        sharedPreferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
 
         mydbadapter = new DBAdapter(this);
         try {
@@ -63,6 +70,9 @@ public class SignUp extends AppCompatActivity {
 
                     long i = mydbadapter.register(username, password, phone, email, gender);
                     if (i != -1){
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putInt("login", 1);
+                        editor.apply();
                         Toast.makeText(SignUp.this, "Account successfully created", Toast.LENGTH_SHORT).show();
                         editUsername.setText("");
                         editAddress.setText("");
