@@ -26,6 +26,9 @@ public class ListViewAdapter extends BaseAdapter{
         inflater = LayoutInflater.from(this.context);
     }
 
+    /*
+    * Diastowo Faryduana
+    * */
     @Override
     public int getCount() {
         return data.size();
